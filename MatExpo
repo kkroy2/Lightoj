@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int mod;
+const int mxn = 2;
+int a1 , b1;
+struct Matrix
+{
+	int mat[mxn][mxn];
+};
+Matrix matMul(Matrix a , Matrix b)
+{
+	Matrix ans;
+	for(int i = 0; i < mxn; i++)
+	{
+		for(int j = 0; j < mxn; j++)
+		{
+			ans.mat[i][j] = 0;
+			for(int k = 0; k < mxn; k++)
+			{
+				ans.mat[i][j] += (a.mat[i][k]*b.mat[k][j])%mod;
+				ans.mat[i][j] %=mod;
+			}
+		}
+	}
+	return ans;
+}
+Matrix matPow(Matrix base , int p)
+{
+	cout<<"Power "<<p<<endl;
+	if(p==0)
+	{
+		Matrix baseMatrix;
+		for(int i = 0; i < mxn; i++)
+		{
+			for(int j = 0; j < mxn; j++)
+			{
+				baseMatrix.mat[i][j] = (i==j);
+			}
+		}
+		return baseMatrix;
+	}
+	Matrix x = matPow(base , p/2);
+	x = matMul(x , x);
+	for(int i = 0; i < mxn; i++)
+		{
+			for(int j =0; j < mxn; j++)
+			{
+				cout<<x.mat[i][j]<<" ";
+			}
+			cout<<endl;
+		}
+	if(p&1)
+	x = matMul(x , base);
+	return x;
+}
+int solve(Matrix a , Matrix b,int p)
+{
+		a = matPow(a , p);
+		for(int i = 0; i < mxn; i++)
+		{
+			for(int j =0; j < mxn; j++)
+			{
+				cout<<a.mat[i][j]<<" ";
+			}
+			cout<<endl;
+		}
+		int ans = 0;
+		for(int i = 0; i < mxn; i++)
+		{
+			ans +=(a.mat[0][i]*b.mat[0][i])%mod;
+			ans %=mod;
+		}
+		return ans;
+}
+int main()
+{
+	//freopen("output.txt","w",stdout);
+	int tc;
+	cin>>tc;
+	int cs = 0;
+	while(tc--)
+	{
+		cs++;
+		int m,p;
+		cin>>a1>>b1>>p>>m;
+		mod = 1;
+		for(int i = 0; i < m; i++)
+		{
+			mod *=10;
+		}
+		if(p==0)
+		{
+			cout<<"Case "<<cs<<": "<<a1%mod<<endl;
+		}
+		else if(p==1)
+		{
+			cout<<"Case "<<cs<<": "<<b1%mod<<endl;
+		}
+		else {
+			p=-1;
+		Matrix a , b;
+		a.mat[0][0] = 1;
+		a.mat[0][1] = 1;
+		a.mat[1][0] = 1;
+		a.mat[1][1] = 0;
+		b.mat[0][0] = a1;
+		b.mat[0][1] = b1;
+		int ans = solve(a , b, p);
+		cout<<"Case "<<cs<<": "<<ans<<endl;
+	}
+	}
+	return 0;
+}
