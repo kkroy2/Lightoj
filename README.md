@@ -1,2 +1,2 @@
 # Lightoj
-Here lightoj problems' solution be available . First try yourself :)  
+Here lightoj problems' solution be available.
